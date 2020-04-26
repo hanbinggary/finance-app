@@ -2,7 +2,7 @@
 
 ## Project setup
 ```
-$ npm install //安装相关依赖包
+$ npm install //安装相关依赖包,推荐使用淘宝镜像更快
 ```
 
 ### Compiles and hot-reloads for development
@@ -22,6 +22,12 @@ $ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### 相关技术
+Vue、Vuex、jQuery WEUI、better-scroll滚动插件、html5、css3、ES6
+
+### 数据来源
+新浪财经、天行数据
 
 ### 项目效果截图
 
