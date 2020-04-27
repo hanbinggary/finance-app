@@ -196,13 +196,13 @@
       toggleTab2(i) {
         this.toggleActive2 = i
       },
-      queryShare(code) {
-        this.axios(`/sina/list=${code}`).then(res => {
+      queryShare() {
+        this.axios(`/sina/list=${this.shareCode}`).then(res => {
           let str = res.data.split('"')[1]
           let arr = str.split(',')
-          if(code.match('s_')){ //判断是指数还是个股
+          if(this.shareCode.match('s_')){ //判断是指数还是个股
             this.share = {
-              shareCode: code, //股票代码
+              shareCode: this.shareCode, //股票代码
               shareName: arr[0], //股票名
               nowPrice: Number(arr[1]).toFixed(2), //现价
               upAndDown:Number(arr[2]).toFixed(2), //涨跌额
@@ -214,7 +214,7 @@
             }
           }else{
             this.share = {
-              shareCode: code, //股票代码
+              shareCode: this.shareCode, //股票代码
               shareName: arr[0], //股票名
               todayStartPrice: Number(arr[1]).toFixed(2), //今开
               lastDayEndPrice: Number(arr[2]).toFixed(2), //昨收
@@ -259,7 +259,8 @@
     mounted() {
       clearInterval(this.timer)
       clearInterval(this.timer2)
-      this.timer = setInterval(this.queryShare(this.shareCode), 1000)
+      this.queryShare()
+      this.timer = setInterval(this.queryShare, 5000)
       this.timer2 = setInterval(() => {
         this.index++
           if(this.index > 2) {

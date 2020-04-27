@@ -90,6 +90,28 @@
           }
         })
       },
+      updateHotShare() {
+        this.hotSharesCode.forEach(code => {
+          this.axios(`/sina/list=${code}`).then(res => {
+            let str = res.data.split('"')[1]
+            let arr = str.split(',')
+            this.hotShare = this.hotShare.map(item => {
+              if(item.shareCode == code) {
+                return {
+                  ...item,
+                  shareCode: code, //股票代码
+                  shareName: arr[0], //股票名
+                  nowPrice: Number(arr[1]).toFixed(2), //现价
+                  upAndDown: Number(arr[2]).toFixed(2), //涨跌额
+                  percent: Number(arr[3]), //涨跌幅
+                }
+              } else {
+                return item
+              }
+            })
+          })
+        })
+      },
       initalScroll() {
         if(!this.menuScroller) {
           //避免内存泄露，当menuScroller存在时无需再实例化
@@ -124,9 +146,13 @@
           })
         })
       })
+      setTimeout(() => {
+        this.timer = setInterval(this.updateHotShare, 5000)
+      }, 2000)
     },
     beforeDestroy() {
       this.destroyScroll()
+      clearInterval(this.timer)
     }
   }
 </script>

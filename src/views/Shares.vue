@@ -63,7 +63,8 @@
       }),
       shareQueryCode() {
         return this.shareCode
-      },
+      }
+      
     },
     methods: {
       delShare(code) {
@@ -90,6 +91,28 @@
               upAndDown: (Number(arr[3]).toFixed(2) - Number(arr[2]).toFixed(2)).toFixed(2), //涨跌额
             })
           }
+        })
+      },
+      updateHotShare() {
+        this.hotSharesCode.forEach(code => {
+          this.axios(`/sina/list=${code}`).then(res => {
+            let str = res.data.split('"')[1]
+            let arr = str.split(',')
+            this.hotShare = this.hotShare.map(item => {
+              if(item.shareCode == code) {
+                return {
+                  ...item,
+                  shareCode: code, //股票代码
+                  shareName: arr[0], //股票名
+                  nowPrice: arr[3], //现价
+                  percent: ((Number(arr[3]) - Number(arr[2])) / Number(arr[2]) * 100).toFixed(2), //涨跌幅
+                  upAndDown: (Number(arr[3]).toFixed(2) - Number(arr[2]).toFixed(2)).toFixed(2), //涨跌额
+                }
+              } else {
+                return item
+              }
+            })
+          })
         })
       },
       initalScroll() {
@@ -126,9 +149,13 @@
           })
         })
       })
+      setTimeout(() => {
+        this.timer = setInterval(this.updateHotShare, 5000)
+      }, 2000)
     },
     beforeDestroy() {
       this.destroyScroll()
+      clearInterval(this.timer)
     }
   }
 </script>

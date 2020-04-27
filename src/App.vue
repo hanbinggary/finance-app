@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="nav">
+    <div class="nav" v-if="tabType">
       <router-link to="/quotation" tag="span">
         <div class="icon-hangqing nav-icon"></div>
         <p>行情</p>
@@ -32,6 +32,11 @@
 <script>
   import { mapState } from 'vuex'
   export default {
+    data(){
+      return {
+        tabType:true
+      }
+    },
     computed: {
       ...mapState({
         isLogin: state => state.isLogin,
@@ -41,6 +46,15 @@
       ifLogin(){
         if(!this.isLogin){
           alert("请先登录！");
+        }
+      }
+    },
+    watch:{
+      $route(e){
+        if(e.name == 'ShareDetails'){ //监听跳转路由隐藏底部导航栏
+          this.tabType = false
+        }else{
+          this.tabType = true
         }
       }
     }
